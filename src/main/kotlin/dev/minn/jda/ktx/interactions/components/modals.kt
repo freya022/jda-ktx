@@ -19,6 +19,7 @@ package dev.minn.jda.ktx.interactions.components
 
 import net.dv8tion.jda.api.components.ModalTopLevelComponent
 import net.dv8tion.jda.api.components.actionrow.ActionRow
+import net.dv8tion.jda.api.components.label.Label
 import net.dv8tion.jda.api.components.textinput.TextInput
 import net.dv8tion.jda.api.components.textinput.TextInputStyle
 import net.dv8tion.jda.api.interactions.callbacks.IModalCallback
@@ -121,7 +122,7 @@ class InlineModal(val builder: Modal.Builder) {
         requiredLength: IntRange? = TextInputDefaults.requiredLength,
         builder: TextInput.Builder.() -> Unit = {}
     ) {
-        val text = TextInput.create(id, label, TextInputStyle.PARAGRAPH)
+        val text = TextInput.create(id, TextInputStyle.PARAGRAPH)
         if (uniqueId != -1)
             text.uniqueId = uniqueId
         text.isRequired = required
@@ -130,7 +131,7 @@ class InlineModal(val builder: Modal.Builder) {
         requiredLength?.let {
             text.setRequiredRange(it.first, it.last)
         }
-        configuredComponents.add(row(text.apply(builder).build()))
+        configuredComponents.add(Label.of(label, text.apply(builder).build()))
     }
 
     /** Adds a [TextInput] with [TextInputStyle.SHORT] to the modal */
@@ -144,7 +145,7 @@ class InlineModal(val builder: Modal.Builder) {
         requiredLength: IntRange? = TextInputDefaults.requiredLength,
         builder: TextInput.Builder.() -> Unit = {}
     ) {
-        val text = TextInput.create(id, label, TextInputStyle.SHORT)
+        val text = TextInput.create(id, TextInputStyle.SHORT)
         if (uniqueId != -1)
             text.uniqueId = uniqueId
         text.isRequired = required
@@ -153,7 +154,7 @@ class InlineModal(val builder: Modal.Builder) {
         requiredLength?.let {
             text.setRequiredRange(it.first, it.last)
         }
-        configuredComponents.add(row(text.apply(builder).build()))
+        configuredComponents.add(Label.of(label, text.apply(builder).build()))
     }
 
     /**
@@ -161,7 +162,7 @@ class InlineModal(val builder: Modal.Builder) {
      *
      * @return The [Modal] instance
      */
-    fun build(): Modal = builder.addComponents(configuredComponents.mapNotNull { it as? ActionRow }).build()
+    fun build(): Modal = builder.addComponents(configuredComponents).build()
 }
 
 class ModalComponentAccumulator(private val config: MutableList<ModalTopLevelComponent>) {
